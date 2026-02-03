@@ -1,0 +1,54 @@
+package com.carp.sample.publisher.controller;
+
+import com.carp.sample.publisher.test.util.TestPublisher;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.test.web.servlet.client.RestTestClient;
+
+import static com.carp.sample.publisher.test.util.TestPublisher.SUCCESSFUL_CONTENT;
+
+@WebMvcTest({PublisherController.class, TestPublisher.class})
+@AutoConfigureRestTestClient
+class PublisherControllerTest {
+
+    private static final String PATH = "/publisher/publish";
+
+    @Autowired
+    private RestTestClient restTestClient;
+
+    @Test
+    void givenSuccessfulPublish_whenSendMessage_thenReturnsTrue() {
+        restTestClient.post()
+                .uri(uriBuilder -> uriBuilder
+                        .path(PATH)
+                        .queryParam("to", "my-queue")
+                        .queryParam("content", SUCCESSFUL_CONTENT)
+                        .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Boolean.class).isEqualTo(true);
+    }
+
+    @Test
+    void givenFailedPublish_whenSendMessage_thenReturnsFalse() {
+        restTestClient.post()
+                .uri(uriBuilder -> uriBuilder
+                        .path(PATH)
+                        .queryParam("to", "my-queue")
+                        .queryParam("content", "failed")
+                        .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Boolean.class).isEqualTo(false);
+    }
+
+    @Test
+    void givenNoParameters_whenSendMessage_thenReturnsBadRequest() {
+        restTestClient.post()
+                .uri(PATH)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+}

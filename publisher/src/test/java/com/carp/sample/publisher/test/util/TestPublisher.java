@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 
 @Profile("test")
 @Service
-class TestPublisher implements PublisherService {
+public class TestPublisher implements PublisherService {
+
+    public static final String SUCCESSFUL_CONTENT = "successful";
 
     @Override
     public boolean publish(String to, String content) {
-        return true;
+        return SUCCESSFUL_CONTENT.equals(content);
     }
 }
