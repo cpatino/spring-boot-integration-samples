@@ -27,8 +27,8 @@ class PublisherControllerTest {
                         .queryParam("content", SUCCESSFUL_CONTENT)
                         .build())
                 .exchange()
-                .expectStatus().isOk()
-                .expectBody(Boolean.class).isEqualTo(true);
+                .expectStatus().isNoContent()
+                .expectBody().isEmpty();
     }
 
     @Test
@@ -40,8 +40,7 @@ class PublisherControllerTest {
                         .queryParam("content", "failed")
                         .build())
                 .exchange()
-                .expectStatus().isOk()
-                .expectBody(Boolean.class).isEqualTo(false);
+                .expectStatus().is5xxServerError();
     }
 
     @Test
