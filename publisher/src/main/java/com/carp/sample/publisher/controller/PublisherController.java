@@ -1,5 +1,6 @@
 package com.carp.sample.publisher.controller;
 
+import com.carp.sample.publisher.dto.EventRequestDto;
 import com.carp.sample.publisher.service.PublisherService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class PublisherController {
 
     @PostMapping("/publish")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void sendMessage(@RequestParam String content) {
-        service.publish(content);
+    public void sendMessage(@RequestBody EventRequestDto request) {
+        service.publish(request.content());
     }
 }

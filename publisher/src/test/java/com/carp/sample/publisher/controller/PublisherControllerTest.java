@@ -1,5 +1,6 @@
 package com.carp.sample.publisher.controller;
 
+import com.carp.sample.publisher.dto.EventRequestDto;
 import com.carp.sample.publisher.test.util.TestPublisher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,8 @@ class PublisherControllerTest {
         restTestClient.post()
                 .uri(uriBuilder -> uriBuilder
                         .path(PATH)
-                        .queryParam("to", "my-queue")
-                        .queryParam("content", SUCCESSFUL_CONTENT)
                         .build())
+                .body(new EventRequestDto(SUCCESSFUL_CONTENT))
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectBody().isEmpty();
@@ -36,9 +36,8 @@ class PublisherControllerTest {
         restTestClient.post()
                 .uri(uriBuilder -> uriBuilder
                         .path(PATH)
-                        .queryParam("to", "my-queue")
-                        .queryParam("content", "failed")
                         .build())
+                .body(new EventRequestDto("failed"))
                 .exchange()
                 .expectStatus().is5xxServerError();
     }
