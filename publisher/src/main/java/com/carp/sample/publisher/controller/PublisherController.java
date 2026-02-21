@@ -1,7 +1,7 @@
 package com.carp.sample.publisher.controller;
 
-import com.carp.sample.publisher.dto.EventRequestDto;
-import com.carp.sample.publisher.service.PublisherService;
+import com.carp.sample.publisher.dto.EventDto;
+import com.carp.sample.publisher.service.PublisherStrategy;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/publisher")
 public class PublisherController {
 
-    private final PublisherService service;
+    private final PublisherStrategy publisher;
 
-    public PublisherController(PublisherService service) {
-        this.service = service;
+    public PublisherController(PublisherStrategy publisher) {
+        this.publisher = publisher;
     }
 
     @PostMapping("/publish")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void sendMessage(@RequestBody EventRequestDto request) {
-        service.publish(request.content());
+    public void sendMessage(@RequestBody EventDto request) {
+        publisher.publish(request.mechanism(), request.content());
     }
 }

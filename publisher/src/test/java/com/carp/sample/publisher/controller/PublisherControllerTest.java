@@ -1,6 +1,6 @@
 package com.carp.sample.publisher.controller;
 
-import com.carp.sample.publisher.dto.EventRequestDto;
+import com.carp.sample.publisher.dto.EventDto;
 import com.carp.sample.publisher.test.util.TestPublisher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ class PublisherControllerTest {
                 .uri(uriBuilder -> uriBuilder
                         .path(PATH)
                         .build())
-                .body(new EventRequestDto(SUCCESSFUL_CONTENT))
+                .body(new EventDto("test", SUCCESSFUL_CONTENT))
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectBody().isEmpty();
@@ -37,7 +37,7 @@ class PublisherControllerTest {
                 .uri(uriBuilder -> uriBuilder
                         .path(PATH)
                         .build())
-                .body(new EventRequestDto("failed"))
+                .body(new EventDto("test", "failed"))
                 .exchange()
                 .expectStatus().is5xxServerError();
     }

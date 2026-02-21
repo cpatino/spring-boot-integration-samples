@@ -12,6 +12,11 @@ public class TestPublisher implements PublisherService {
     public static final String SUCCESSFUL_CONTENT = "successful";
 
     @Override
+    public boolean mustPublish(String mechanism) {
+        return true;
+    }
+
+    @Override
     public void publish(String content) {
         if (!SUCCESSFUL_CONTENT.equals(content)) {
             throw new MessageNotPublishedException();
