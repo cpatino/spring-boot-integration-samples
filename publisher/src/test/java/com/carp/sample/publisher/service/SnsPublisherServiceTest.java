@@ -1,36 +1,37 @@
 package com.carp.sample.publisher.service;
 
 import com.carp.sample.publisher.exception.MessageNotPublishedException;
-import io.awspring.cloud.sqs.operations.SqsTemplate;
+import io.awspring.cloud.sns.core.SnsTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.messaging.MessagingException;
 
 import static com.carp.sample.publisher.domain.PublisherMechanism.BROADCAST;
 import static com.carp.sample.publisher.domain.PublisherMechanism.ONE_RECEIVER;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doThrow;
 
-class SqsPublisherServiceTest {
+class SnsPublisherServiceTest {
 
-    private SqsPublisherService service;
-    private SqsTemplate sqsTemplate;
+    private SnsPublisherService service;
+    private SnsTemplate snsTemplate;
 
     @BeforeEach
     void setUp() {
-        sqsTemplate = Mockito.mock(SqsTemplate.class);
-        service = new SqsPublisherService(sqsTemplate);
+        snsTemplate = Mockito.mock(SnsTemplate.class);
+        service = new SnsPublisherService(snsTemplate);
     }
 
     @Test
-    void givenOneReceiverMechanism_whenMustPublish_thenReturnTrue() {
-        assertTrue(service.mustPublish(ONE_RECEIVER));
+    void givenBroadcastMechanism_whenMustPublish_thenReturnTrue() {
+        assertTrue(service.mustPublish(BROADCAST));
     }
 
     @Test
     void givenDifferentMechanism_whenMustPublish_thenReturnFalse() {
-        assertFalse(service.mustPublish(BROADCAST));
+        assertFalse(service.mustPublish(ONE_RECEIVER));
     }
 
     @Test
@@ -40,7 +41,7 @@ class SqsPublisherServiceTest {
 
     @Test
     void givenException_whenPublish_thenThrowMessageNotPublishedException() {
-        when(sqsTemplate.send(any())).thenThrow(RuntimeException.class);
-        assertThrows(MessageNotPublishedException.class, () -> service.publish("runtime-exception"));
+        doThrow(MessagingException.class).when(snsTemplate).sendNotification(anyString(), any(), nullable(String.class));
+        assertThrows(MessageNotPublishedException.class, () -> service.publish("exception"));
     }
 }

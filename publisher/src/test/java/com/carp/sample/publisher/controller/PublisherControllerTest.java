@@ -1,5 +1,6 @@
 package com.carp.sample.publisher.controller;
 
+import com.carp.sample.publisher.domain.PublisherStrategy;
 import com.carp.sample.publisher.dto.EventDto;
 import com.carp.sample.publisher.test.util.TestPublisher;
 import org.junit.jupiter.api.Test;
@@ -8,9 +9,11 @@ import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTe
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
+import static com.carp.sample.publisher.domain.PublisherMechanism.BROADCAST;
+import static com.carp.sample.publisher.domain.PublisherMechanism.ONE_RECEIVER;
 import static com.carp.sample.publisher.test.util.TestPublisher.SUCCESSFUL_CONTENT;
 
-@WebMvcTest({PublisherController.class, TestPublisher.class})
+@WebMvcTest({PublisherController.class, PublisherStrategy.class, TestPublisher.class})
 @AutoConfigureRestTestClient
 class PublisherControllerTest {
 
@@ -25,7 +28,7 @@ class PublisherControllerTest {
                 .uri(uriBuilder -> uriBuilder
                         .path(PATH)
                         .build())
-                .body(new EventDto("test", SUCCESSFUL_CONTENT))
+                .body(new EventDto(ONE_RECEIVER.name(), SUCCESSFUL_CONTENT))
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectBody().isEmpty();
@@ -37,7 +40,7 @@ class PublisherControllerTest {
                 .uri(uriBuilder -> uriBuilder
                         .path(PATH)
                         .build())
-                .body(new EventDto("test", "failed"))
+                .body(new EventDto(BROADCAST.name(), "failed"))
                 .exchange()
                 .expectStatus().is5xxServerError();
     }

@@ -1,7 +1,7 @@
 package com.carp.sample.publisher.controller;
 
 import com.carp.sample.publisher.dto.EventDto;
-import com.carp.sample.publisher.service.PublisherStrategy;
+import com.carp.sample.publisher.domain.PublisherStrategy;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

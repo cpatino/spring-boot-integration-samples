@@ -1,5 +1,6 @@
-package com.carp.sample.publisher.service;
+package com.carp.sample.publisher.domain;
 
+import com.carp.sample.publisher.service.PublisherService;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -14,8 +15,9 @@ public class PublisherStrategy {
     }
 
     public void publish(String mechanism, String content) {
+        var publisherMechanism = PublisherMechanism.valueOf(mechanism);
         publishers.stream()
-                .filter(p -> p.mustPublish(mechanism))
+                .filter(p -> p.mustPublish(publisherMechanism))
                 .forEach(p -> p.publish(content));
     }
 }

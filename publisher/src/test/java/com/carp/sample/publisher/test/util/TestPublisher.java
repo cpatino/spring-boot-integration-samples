@@ -1,5 +1,6 @@
 package com.carp.sample.publisher.test.util;
 
+import com.carp.sample.publisher.domain.PublisherMechanism;
 import com.carp.sample.publisher.exception.MessageNotPublishedException;
 import com.carp.sample.publisher.service.PublisherService;
 import org.springframework.context.annotation.Profile;
@@ -12,7 +13,7 @@ public class TestPublisher implements PublisherService {
     public static final String SUCCESSFUL_CONTENT = "successful";
 
     @Override
-    public boolean mustPublish(String mechanism) {
+    public boolean mustPublish(PublisherMechanism mechanism) {
         return true;
     }
 
