@@ -13,6 +13,7 @@ services:
 
   Kafka:
     image: apache/kafka:latest
+    hostname: kafka-local
     container_name: kafka-local
     ports:
       - "9092:9092"
