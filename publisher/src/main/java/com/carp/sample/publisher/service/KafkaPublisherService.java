@@ -1,6 +1,7 @@
 package com.carp.sample.publisher.service;
 
 import com.carp.sample.publisher.domain.PublisherMechanism;
+import com.carp.sample.publisher.exception.MessageNotPublishedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -33,7 +34,7 @@ public class KafkaPublisherService implements PublisherService {
             template.send(TOPIC_NAME, content);
         } catch (Exception e) {
             log.error("Failed to publish message to Kafka topic: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to publish message to Kafka topic", e);
+            throw new MessageNotPublishedException();
         }
     }
 }
