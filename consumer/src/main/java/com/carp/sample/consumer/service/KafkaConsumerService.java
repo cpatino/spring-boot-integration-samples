@@ -1,19 +1,19 @@
 package com.carp.sample.consumer.service;
 
-import io.awspring.cloud.sqs.annotation.SqsListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-@Profile("aws")
+@Profile("kafka")
 @Service
-class SqsConsumerService implements ConsumerService {
+public class KafkaConsumerService implements ConsumerService {
 
-    private static final Logger log = LoggerFactory.getLogger(SqsConsumerService.class);
+    private static final Logger log = LoggerFactory.getLogger(KafkaConsumerService.class);
 
     @Override
-    @SqsListener("my-queue")
+    @KafkaListener(topics = "my-topic")
     public void consume(String content) {
         log.info("Received message: {}", content);
     }
